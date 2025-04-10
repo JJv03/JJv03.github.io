@@ -1,10 +1,11 @@
 ---
 layout: default
 modal-id: 1
-img: eldenController.png
+# img: eldenController.png
+img: game.png
 alt: image-alt
 link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
-link_text: Ver el gameplay
+link_text: Take a look to the project :)
 project_duration: Summer 2024 - Summer 2025
 client: Personal Project
 category: App Development
