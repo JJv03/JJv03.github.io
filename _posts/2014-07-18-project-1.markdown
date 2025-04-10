@@ -3,6 +3,7 @@ layout: default
 modal-id: 1
 img: eldenController.png
 alt: image-alt
+link: https://www.youtube.com/watch?v=dQw4w9WgXcQ
 project_duration: Summer 2024 - Summer 2025
 client: Personal Project
 category: App Development
