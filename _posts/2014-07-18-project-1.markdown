@@ -1,7 +1,7 @@
 ---
 layout: default
 modal-id: 1
-date: 
+date: 2024 - 2025
 img: eldenController.png
 alt: image-alt
 project-date: Summer 2024 - Summer 2025
