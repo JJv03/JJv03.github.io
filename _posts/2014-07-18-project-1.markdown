@@ -1,10 +1,9 @@
 ---
 layout: default
 modal-id: 1
-date: 2024 - 2025
 img: eldenController.png
 alt: image-alt
-project-date: Summer 2024 - Summer 2025
+project_duration: Summer 2024 - Summer 2025
 client: Personal Project
 category: App Development
 description: A different and curious way to play the famous game "Elden Ring". All you need is a camera :)
