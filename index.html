@@ -1,3 +1,625 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucy Batten — Software Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0D0A0F;
+      --bg2:    #130F16;
+      --bg3:    #1A1420;
+      --card:   #1F1828;
+      --border:  rgba(255,180,120,0.08);
+      --border2: rgba(255,180,120,0.18);
+      --text:   #F5EEE8;
+      --muted:  #9A8A80;
+      --faint:  #4E3F3A;
+      --sun:    #FF9A5C;
+      --sun2:   #E8772A;
+      --dusk:   #FF6B6B;
+      --magenta:#C96FD8;
+      --gold:   #FFD166;
+      --blush:  #FF8FA3;
+      --r: 10px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    #cursor {
+      position: fixed; width: 12px; height: 12px;
+      background: var(--sun); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s;
+      mix-blend-mode: difference;
+    }
+    #cursor-ring {
+      position: fixed; width: 36px; height: 36px;
+      border: 1.5px solid var(--sun); border-radius: 50%;
+      pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: all .12s ease; opacity: .5;
+    }
+
+    #canvas {
+      position: fixed; top:0; left:0; width:100%; height:100%;
+      pointer-events: none; z-index: 0; opacity: .35;
+    }
+
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display:flex; justify-content:space-between; align-items:center;
+      padding: 0 3rem; height: 60px;
+      background: rgba(13,10,15,.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: 'Space Mono', monospace; font-size:14px;
+      color: var(--sun); text-decoration:none; letter-spacing:-.02em;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display:flex; gap:2rem; }
+    .nav-links a {
+      font-size:12px; font-weight:600; letter-spacing:.08em;
+      text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color .2s;
+    }
+    .nav-links a:hover { color: var(--sun); }
+
+    main { position:relative; z-index:1; }
+
+    .section { max-width:1100px; margin:0 auto; padding:6rem 3rem; }
+
+    .label {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'Space Mono',monospace; font-size:11px;
+      color:var(--sun); letter-spacing:.1em; text-transform:uppercase; margin-bottom:2rem;
+    }
+    .label::before { content:''; display:block; width:24px; height:1px; background:var(--sun); }
+
+    /* HERO */
+    #hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding-top:60px; }
+    .hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; align-items:center; }
+    .hero-status {
+      display:inline-flex; align-items:center; gap:8px;
+      font-family:'Space Mono',monospace; font-size:11px; color:var(--sun);
+      background:rgba(255,154,92,.08); border:1px solid rgba(255,154,92,.22);
+      padding:6px 14px; border-radius:999px; margin-bottom:2rem;
+    }
+    .status-dot { width:6px; height:6px; border-radius:50%; background:var(--sun); animation:pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+    .hero-name { font-size:clamp(52px,7vw,90px); font-weight:800; line-height:.95; letter-spacing:-.03em; margin-bottom:1.5rem; }
+    .hero-name .line1 { display:block; color:var(--text); }
+    .hero-name .line2 { display:block; color:transparent; -webkit-text-stroke:1.5px var(--dusk); }
+    .hero-name .line3 { display:block; color:var(--sun); }
+    .hero-desc { font-size:16px; color:var(--muted); line-height:1.8; margin-bottom:2.5rem; max-width:420px; }
+    .hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
+
+    .btn-primary {
+      display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px;
+      letter-spacing:.04em; text-transform:uppercase; padding:14px 28px;
+      background:var(--sun); color:var(--bg); border:none; border-radius:4px; text-decoration:none; transition:all .2s;
+    }
+    .btn-primary:hover { background:var(--sun2); transform:translateY(-2px); }
+    .btn-ghost {
+      display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:13px;
+      letter-spacing:.04em; text-transform:uppercase; padding:14px 28px;
+      background:transparent; color:var(--text); border:1px solid var(--border2); border-radius:4px; text-decoration:none; transition:all .2s;
+    }
+    .btn-ghost:hover { border-color:var(--sun); color:var(--sun); transform:translateY(-2px); }
+
+    /* TERMINAL */
+    .terminal { background:var(--bg3); border:1px solid var(--border2); border-radius:12px; overflow:hidden; font-family:'Space Mono',monospace; }
+    .term-bar { background:var(--card); padding:12px 16px; display:flex; align-items:center; gap:8px; border-bottom:1px solid var(--border); }
+    .term-dot { width:10px; height:10px; border-radius:50%; }
+    .term-dot.r{background:#FF5F56;} .term-dot.y{background:#FFBD2E;} .term-dot.g{background:#27C93F;}
+    .term-title { font-size:11px; color:var(--muted); margin-left:8px; }
+    .term-body { padding:20px 24px; font-size:13px; line-height:1.9; }
+    .term-line { display:block; }
+    .term-prompt{color:var(--sun);} .term-cmd{color:var(--text);}
+    .term-key{color:var(--magenta);} .term-val{color:var(--gold);}
+    .term-str{color:var(--blush);} .term-brace{color:var(--dusk);}
+    .term-cursor { display:inline-block; width:8px; height:14px; background:var(--sun); vertical-align:middle; animation:blink 1s step-end infinite; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+    /* ABOUT */
+    #about { border-top:1px solid var(--border); }
+    .about-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:5rem; align-items:start; }
+    .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:2rem; }
+    .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:1.2rem; transition:border-color .2s; }
+    .stat-card:hover { border-color:var(--sun); }
+    .stat-num { font-family:'Space Mono',monospace; font-size:28px; font-weight:700; color:var(--sun); letter-spacing:-.04em; }
+    .stat-label { font-size:12px; color:var(--muted); margin-top:4px; }
+    .about-text { font-size:17px; color:var(--muted); line-height:1.85; margin-bottom:1.5rem; }
+    .about-text strong { color:var(--text); font-weight:600; }
+    .skill-list { display:flex; flex-wrap:wrap; gap:8px; margin-top:2rem; }
+    .skill { font-family:'Space Mono',monospace; font-size:11px; padding:6px 14px; border-radius:4px; border:1px solid var(--border2); color:var(--muted); background:var(--bg3); transition:all .2s; letter-spacing:.04em; }
+    .skill:hover { border-color:var(--sun); color:var(--sun); background:rgba(255,154,92,.05); }
+
+    /* PROJECTS */
+    #projects { border-top:1px solid var(--border); }
+    .section-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:3rem; }
+    .section-title { font-size:clamp(36px,5vw,56px); font-weight:800; letter-spacing:-.03em; line-height:1; }
+    .section-title span { color:var(--sun); }
+    .view-all { font-family:'Space Mono',monospace; font-size:11px; color:var(--muted); text-decoration:none; display:flex; align-items:center; gap:6px; letter-spacing:.06em; text-transform:uppercase; transition:color .2s; }
+    .view-all:hover { color:var(--sun); }
+    .projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .proj-card {
+      background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem;
+      text-decoration:none; display:block; position:relative; overflow:hidden; transition:all .3s;
+    }
+    .proj-card::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,var(--sun),var(--dusk),var(--magenta));
+      transform:scaleX(0); transform-origin:left; transition:transform .3s;
+    }
+    .proj-card:hover { border-color:var(--border2); transform:translateY(-4px); }
+    .proj-card:hover::before { transform:scaleX(1); }
+    .proj-number { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); letter-spacing:.1em; margin-bottom:1.5rem; }
+    .proj-title { font-size:20px; font-weight:700; color:var(--text); margin-bottom:.75rem; letter-spacing:-.02em; }
+    .proj-desc { font-size:14px; color:var(--muted); line-height:1.65; margin-bottom:2rem; }
+    .proj-footer { display:flex; justify-content:space-between; align-items:center; }
+    .proj-tag { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:.08em; text-transform:uppercase; padding:4px 10px; border-radius:4px; }
+    .tag-oss { background:rgba(255,154,92,.12); color:var(--sun); }
+    .tag-web { background:rgba(201,111,216,.12); color:var(--magenta); }
+    .proj-arrow { width:32px; height:32px; border-radius:50%; border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:14px; transition:all .2s; }
+    .proj-card:hover .proj-arrow { background:var(--sun); color:var(--bg); border-color:var(--sun); }
+
+    /* WRITING */
+    #writing { border-top:1px solid var(--border); }
+    .posts-stack { display:flex; flex-direction:column; }
+    .post-row { display:flex; align-items:center; gap:2rem; padding:1.5rem 0; border-bottom:1px solid var(--border); text-decoration:none; transition:all .2s; position:relative; }
+    .post-row::before { content:''; position:absolute; left:-3rem; right:-3rem; top:0; bottom:0; background:rgba(255,154,92,.03); opacity:0; transition:opacity .2s; }
+    .post-row:hover::before { opacity:1; }
+    .post-num { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); width:24px; flex-shrink:0; }
+    .post-date-col { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); width:70px; flex-shrink:0; }
+    .post-title-col { flex:1; font-size:17px; font-weight:600; color:var(--text); letter-spacing:-.01em; transition:color .2s; }
+    .post-row:hover .post-title-col { color:var(--sun); }
+    .post-preview-col { font-size:13px; color:var(--muted); flex:1; line-height:1.5; }
+    .post-arrow { color:var(--faint); font-size:18px; transition:all .2s; }
+    .post-row:hover .post-arrow { color:var(--sun); transform:translateX(4px); }
+    .writing-cta { margin-top:2.5rem; display:flex; align-items:center; gap:1rem; }
+
+    /* SOCIAL MEDIA */
+    #social { border-top:1px solid var(--border); }
+    .social-platforms { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+
+    .platform-card {
+      background:var(--card); border:1px solid var(--border); border-radius:14px; padding:1.8rem;
+      text-decoration:none; display:block; transition:all .3s; position:relative; overflow:hidden;
+    }
+    .platform-card::after { content:''; position:absolute; inset:0; opacity:0; transition:opacity .3s; border-radius:14px; }
+    .platform-card:hover { transform:translateY(-4px); }
+
+    .platform-card.yt::after  { background:radial-gradient(ellipse at top left,rgba(255,107,107,.13) 0%,transparent 65%); }
+    .platform-card.gh::after  { background:radial-gradient(ellipse at top left,rgba(255,154,92,.11) 0%,transparent 65%); }
+    .platform-card.ss::after  { background:radial-gradient(ellipse at top left,rgba(255,209,102,.11) 0%,transparent 65%); }
+    .platform-card.tw::after  { background:radial-gradient(ellipse at top left,rgba(201,111,216,.11) 0%,transparent 65%); }
+    .platform-card.li::after  { background:radial-gradient(ellipse at top left,rgba(255,154,92,.11) 0%,transparent 65%); }
+    .platform-card.pt::after  { background:radial-gradient(ellipse at top left,rgba(255,143,163,.11) 0%,transparent 65%); }
+    .platform-card:hover::after { opacity:1; }
+
+    .platform-card.yt:hover { border-color:var(--dusk); }
+    .platform-card.gh:hover { border-color:var(--sun); }
+    .platform-card.ss:hover { border-color:var(--gold); }
+    .platform-card.tw:hover { border-color:var(--magenta); }
+    .platform-card.li:hover { border-color:var(--sun); }
+    .platform-card.pt:hover { border-color:var(--blush); }
+
+    .platform-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.2rem; position:relative; z-index:1; }
+    .platform-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+    .yt-ic { background:rgba(255,107,107,.15); }
+    .gh-ic { background:rgba(255,154,92,.12); }
+    .ss-ic { background:rgba(255,209,102,.12); }
+    .tw-ic { background:rgba(201,111,216,.12); font-size:16px; font-weight:700; color:var(--magenta); font-family:'Syne',sans-serif; }
+    .li-ic { background:rgba(255,154,92,.12); }
+    .pt-ic { background:rgba(255,143,163,.12); }
+
+    .platform-badge { font-family:'Space Mono',monospace; font-size:10px; padding:4px 10px; border-radius:999px; letter-spacing:.06em; }
+    .badge-yt { background:rgba(255,107,107,.15); color:var(--dusk); }
+    .badge-gh { background:rgba(255,154,92,.12); color:var(--sun); }
+    .badge-ss { background:rgba(255,209,102,.12); color:var(--gold); }
+    .badge-tw { background:rgba(201,111,216,.12); color:var(--magenta); }
+    .badge-li { background:rgba(255,154,92,.12); color:var(--sun); }
+    .badge-pt { background:rgba(255,143,163,.12); color:var(--blush); }
+
+    .platform-name { font-size:18px; font-weight:700; color:var(--text); margin-bottom:4px; letter-spacing:-.02em; position:relative; z-index:1; }
+    .platform-handle { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); margin-bottom:1rem; position:relative; z-index:1; }
+    .platform-desc { font-size:13px; color:var(--muted); line-height:1.6; margin-bottom:1.2rem; position:relative; z-index:1; }
+    .platform-link { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); letter-spacing:.04em; display:flex; align-items:center; gap:6px; transition:color .2s; position:relative; z-index:1; }
+    .platform-card.yt:hover .platform-link { color:var(--dusk); }
+    .platform-card.gh:hover .platform-link { color:var(--sun); }
+    .platform-card.ss:hover .platform-link { color:var(--gold); }
+    .platform-card.tw:hover .platform-link { color:var(--magenta); }
+    .platform-card.li:hover .platform-link { color:var(--sun); }
+    .platform-card.pt:hover .platform-link { color:var(--blush); }
+
+    /* PRODUCTS */
+    #products { border-top:1px solid var(--border); }
+    .products-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .prod-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; text-decoration:none; display:block; transition:all .3s; }
+    .prod-card:hover { border-color:var(--magenta); transform:translateY(-3px); }
+    .prod-cover { height:140px; display:flex; align-items:center; justify-content:center; background:var(--bg3); border-bottom:1px solid var(--border); font-size:40px; position:relative; overflow:hidden; }
+    .prod-cover-bg { position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(201,111,216,.15) 0%,transparent 70%); }
+    .prod-body { padding:1.2rem; }
+    .prod-name { font-size:15px; font-weight:700; color:var(--text); margin-bottom:4px; letter-spacing:-.01em; }
+    .prod-price { font-family:'Space Mono',monospace; font-size:13px; color:var(--magenta); }
+    .prod-placeholder { color:var(--faint); font-size:13px; }
+
+    /* CONTACT */
+    #contact { border-top:1px solid var(--border); }
+    .contact-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
+    .contact-big { font-size:clamp(40px,5.5vw,68px); font-weight:800; letter-spacing:-.04em; line-height:1; margin-bottom:1.5rem; }
+    .contact-big span { color:var(--sun); }
+    .contact-desc { font-size:16px; color:var(--muted); line-height:1.8; margin-bottom:2.5rem; }
+    .contact-email-link { display:block; font-family:'Space Mono',monospace; font-size:15px; color:var(--sun); text-decoration:none; border:1px solid rgba(255,154,92,.25); background:rgba(255,154,92,.05); padding:16px 24px; border-radius:8px; margin-bottom:2rem; transition:all .2s; letter-spacing:.02em; }
+    .contact-email-link:hover { background:rgba(255,154,92,.1); border-color:var(--sun); }
+    .socials-grid { display:flex; flex-wrap:wrap; gap:10px; }
+    .social-pill { display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; padding:10px 18px; border-radius:999px; border:1px solid var(--border2); color:var(--muted); background:var(--bg3); text-decoration:none; transition:all .2s; }
+    .social-pill:hover { color:var(--sun); border-color:var(--sun); background:rgba(255,154,92,.05); }
+    .contact-illustration { background:var(--bg3); border:1px solid var(--border); border-radius:16px; padding:2.5rem; font-family:'Space Mono',monospace; font-size:12px; line-height:2; }
+    .ci-comment{color:var(--faint);} .ci-key{color:var(--magenta);} .ci-val{color:var(--gold);} .ci-str{color:var(--blush);} .ci-bool{color:var(--dusk);} .ci-brace{color:var(--text);}
+
+    footer { border-top:1px solid var(--border); padding:2rem 3rem; max-width:1100px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+    .footer-left { font-family:'Space Mono',monospace; font-size:12px; color:var(--faint); }
+    .footer-right { display:flex; gap:1.5rem; }
+    .footer-right a { font-size:12px; color:var(--faint); text-decoration:none; transition:color .2s; }
+    .footer-right a:hover { color:var(--sun); }
+
+    .fade-up { opacity:0; transform:translateY(30px); transition:opacity .7s ease,transform .7s ease; }
+    .fade-up.visible { opacity:1; transform:translateY(0); }
+
+    @media (max-width:860px) {
+      nav { padding:0 1.5rem; }
+      .nav-links { display:none; }
+      .section { padding:4rem 1.5rem; }
+      .hero-grid { grid-template-columns:1fr; }
+      .terminal { display:none; }
+      .about-layout { grid-template-columns:1fr; gap:2.5rem; }
+      .projects-grid { grid-template-columns:1fr; }
+      .social-platforms { grid-template-columns:1fr 1fr; }
+      .products-grid { grid-template-columns:1fr; }
+      .contact-layout { grid-template-columns:1fr; }
+      .post-preview-col { display:none; }
+      footer { flex-direction:column; gap:12px; text-align:center; }
+    }
+    @media (max-width:540px) { .social-platforms { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+<canvas id="canvas"></canvas>
+
+<nav>
+  <a class="nav-logo" href="#top">lucy<span>.dev</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#writing">Writing</a>
+    <a href="#social">Social</a>
+    <a href="#products">Products</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<main>
+
+  <section id="hero" class="section">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-status"><span class="status-dot"></span>Available for opportunities</div>
+        <h1 class="hero-name">
+          <span class="line1">Software</span>
+          <span class="line2">Developer</span>
+          <span class="line3">& Creator.</span>
+        </h1>
+        <p class="hero-desc">I build thoughtful software and share what I learn: through writing, videos, and digital products. Based in the UK.</p>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="#projects">See my work →</a>
+          <a class="btn-ghost" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <div>
+        <div class="terminal">
+          <div class="term-bar">
+            <span class="term-dot r"></span><span class="term-dot y"></span><span class="term-dot g"></span>
+            <span class="term-title">lucy@portfolio:~</span>
+          </div>
+          <div class="term-body">
+            <span class="term-line"><span class="term-prompt">$ </span><span class="term-cmd">cat about.json</span></span>
+            <span class="term-line">&nbsp;</span>
+            <span class="term-line"><span class="term-brace">{</span></span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-key">"name"</span>: <span class="term-str">"Lucy Batten"</span>,</span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-key">"location"</span>: <span class="term-str">"UK 🇬🇧"</span>,</span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-key">"role"</span>: <span class="term-str">"Software Developer"</span>,</span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-key">"stack"</span>: <span class="term-brace">[</span></span>
+            <span class="term-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">"JavaScript"</span>, <span class="term-str">"TypeScript"</span>,</span>
+            <span class="term-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">"React"</span>, <span class="term-str">"Node.js"</span></span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-brace">]</span>,</span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-key">"creator"</span>: <span class="term-val">true</span>,</span>
+            <span class="term-line">&nbsp;&nbsp;<span class="term-key">"openToWork"</span>: <span class="term-val">true</span></span>
+            <span class="term-line"><span class="term-brace">}</span></span>
+            <span class="term-line">&nbsp;</span>
+            <span class="term-line"><span class="term-prompt">$ </span><span class="term-cursor"></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="section">
+    <div class="about-layout">
+      <div>
+        <div class="label">About me</div>
+        <div class="about-stats">
+          <div class="stat-card fade-up"><div class="stat-num">2+</div><div class="stat-label">Years building</div></div>
+          <div class="stat-card fade-up"><div class="stat-num">500+</div><div class="stat-label">Community members</div></div>
+          <div class="stat-card fade-up"><div class="stat-num">12+</div><div class="stat-label">Articles published</div></div>
+          <div class="stat-card fade-up"><div class="stat-num">3</div><div class="stat-label">Products shipped</div></div>
+        </div>
+      </div>
+      <div class="fade-up">
+        <p class="about-text">I'm a <strong>software developer</strong> with a passion for building clean, purposeful tools. I care about the details... both in code and in how things are communicated.</p>
+        <p class="about-text">Outside of developing, I write about what I'm learning, create content for a growing audience, and ship <strong>digital products</strong> that help other developers and creators.</p>
+        <p class="about-text">Always open to interesting conversations, collabs, and opportunities.</p>
+        <div class="skill-list">
+          <span class="skill">JavaScript</span><span class="skill">TypeScript</span><span class="skill">React</span>
+          <span class="skill">Node.js</span><span class="skill">Python</span><span class="skill">SQL</span>
+          <span class="skill">REST APIs</span><span class="skill">Docker</span><span class="skill">AWS</span>
+          <span class="skill">Git / CI·CD</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="section">
+    <div class="section-header">
+      <div><div class="label">Projects</div><h2 class="section-title">What I've <span>built.</span></h2></div>
+      <a class="view-all" href="https://github.com/lucyb0207" target="_blank">GitHub →</a>
+    </div>
+    <div class="projects-grid">
+      <a class="proj-card fade-up" href="https://github.com/lucyb0207/CodeAtlas" target="_blank">
+        <div class="proj-number">01 / Open Source</div>
+        <div class="proj-title">CodeAtlas</div>
+        <div class="proj-desc">Visualise GitHub repos as interactive dependency graphs. Navigate your codebase like a map.</div>
+        <div class="proj-footer"><span class="proj-tag tag-oss">Open Source</span><span class="proj-arrow">↗</span></div>
+      </a>
+      <a class="proj-card fade-up" href="https://toxic-ai-code-reviewer.vercel.app/" target="_blank">
+        <div class="proj-number">02 / Open Source</div>
+        <div class="proj-title">ToxicAI Code Roaster</div>
+        <div class="proj-desc">An AI that reviews your code with brutally honest, and very funny feedback. Pain is growth.</div>
+        <div class="proj-footer"><span class="proj-tag tag-oss">Open Source</span><span class="proj-arrow">↗</span></div>
+      </a>
+      <a class="proj-card fade-up" href="https://devflow-sand-eta.vercel.app/" target="_blank">
+        <div class="proj-number">03 / Web App</div>
+        <div class="proj-title">DevFlow</div>
+        <div class="proj-desc">A second brain for developers. Capture ideas, snippets, and thoughts without breaking your flow state.</div>
+        <div class="proj-footer"><span class="proj-tag tag-web">Web App</span><span class="proj-arrow">↗</span></div>
+      </a>
+    </div>
+  </section>
+
+  <section id="writing" class="section">
+    <div class="section-header">
+      <div><div class="label">Writing</div><h2 class="section-title">From the <span>newsletter.</span></h2></div>
+      <a class="view-all" href="https://lucybatten.substack.com" target="_blank">Substack →</a>
+    </div>
+    <div class="posts-stack">
+      <a class="post-row" href="https://lucybatten.substack.com/p/how-babels-ast-parser-represents?r=56966q" target="_blank">
+        <span class="post-num">28</span><span class="post-date-col">Apr 2026</span>
+        <span class="post-title-col">How Babel's AST Parser Represents JavaScript Import Statements - With Annotated JSON Examples</span>
+        <span class="post-preview-col">Understanding Babel AST Parsing: How JavaScript Import Statements Are Converted into Abstract Syntax Trees with Annotated JSON Examples and Code-Level Explanation</span>
+        <span class="post-arrow">→</span>
+      </a>
+      <a class="post-row" href="https://lucybatten.substack.com/p/i-built-a-tool-that-turns-any-github?r=56966q" target="_blank">
+        <span class="post-num">22</span><span class="post-date-col">Apr 2026</span>
+        <span class="post-title-col">I Built a Tool That Turns Any GitHub Repo Into an Interactive Dependency Graph: Here's Exactly How It Works</span>
+        <span class="post-preview-col">A deep dive into the real pipeline behind CodeAtlas: AST parsing, import resolution, force-directed graphs, and everything in between</span>
+        <span class="post-arrow">→</span>
+      </a>
+      <a class="post-row" href="https://lucybatten.substack.com/p/insight-log-01-the-full-stack-requestresponse?r=56966q" target="_blank">
+        <span class="post-num">16</span><span class="post-date-col">Apr 2026</span>
+        <span class="post-title-col">INSIGHT LOG #01: The Full-Stack Request Response Loop Explained</span>
+        <span class="post-preview-col">The core loop behind every full-stack app</span>
+        <span class="post-arrow">→</span>
+      </a>
+    </div>
+    <div class="writing-cta">
+      <a class="btn-primary" href="https://lucybatten.substack.com" target="_blank">Subscribe on Substack</a>
+    </div>
+  </section>
+
+  <!-- SOCIAL MEDIA -->
+  <section id="social" class="section">
+    <div class="section-header">
+      <div><div class="label">Social Media</div><h2 class="section-title">Find me <span>online.</span></h2></div>
+    </div>
+    <div class="social-platforms">
+
+      <a class="platform-card yt fade-up" href="https://www.youtube.com/@lucyb0207" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon yt-ic">📺</div>
+          <span class="platform-badge badge-yt">Videos</span>
+        </div>
+        <div class="platform-name">YouTube</div>
+        <div class="platform-handle">@lucyb0207</div>
+        <div class="platform-desc">Dev tutorials, project walkthroughs, and honest takes on learning to code. Higher quality content coming soon.</div>
+        <div class="platform-link">youtube.com/@lucyb0207 →</div>
+      </a>
+
+      <a class="platform-card gh fade-up" href="https://github.com/lucyb0207" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon gh-ic">🐙</div>
+          <span class="platform-badge badge-gh">Code</span>
+        </div>
+        <div class="platform-name">GitHub</div>
+        <div class="platform-handle">@lucyb0207</div>
+        <div class="platform-desc">Open source projects, tools I've built, and the code behind everything I ship.</div>
+        <div class="platform-link">github.com/lucyb0207 →</div>
+      </a>
+
+      <a class="platform-card ss fade-up" href="https://lucybatten.substack.com" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon ss-ic">✉️</div>
+          <span class="platform-badge badge-ss">Newsletter</span>
+        </div>
+        <div class="platform-name">Substack</div>
+        <div class="platform-handle">lucybatten.substack.com</div>
+        <div class="platform-desc">Writing about software, learning, and building things in public. New posts every month.</div>
+        <div class="platform-link">lucybatten.substack.com →</div>
+      </a>
+
+      <a class="platform-card tw fade-up" href="https://twitter.com/lucyb0207" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon tw-ic">𝕏</div>
+          <span class="platform-badge badge-tw">Updates</span>
+        </div>
+        <div class="platform-name">Twitter / X</div>
+        <div class="platform-handle">@lucyb0207</div>
+        <div class="platform-desc">Quick thoughts, dev hot takes, and live updates on what I'm building right now.</div>
+        <div class="platform-link">twitter.com/lucyb0207 →</div>
+      </a>
+
+      <a class="platform-card li fade-up" href="https://linkedin.com/in/lucybatten" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon li-ic">💼</div>
+          <span class="platform-badge badge-li">Professional</span>
+        </div>
+        <div class="platform-name">LinkedIn</div>
+        <div class="platform-handle">in/lucybatten</div>
+        <div class="platform-desc">Professional updates, career milestones, and connecting with other developers.</div>
+        <div class="platform-link">linkedin.com/in/lucybatten →</div>
+      </a>
+
+      <a class="platform-card pt fade-up" href="https://www.patreon.com/LucyBuilds" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon pt-ic">🎨</div>
+          <span class="platform-badge badge-pt">Support</span>
+        </div>
+        <div class="platform-name">Patreon</div>
+        <div class="platform-handle">LucyBuilds</div>
+        <div class="platform-desc">Support the work and get early access to tutorials, resources, and behind-the-scenes content.</div>
+        <div class="platform-link">patreon.com/LucyBuilds →</div>
+      </a>
+
+    </div>
+  </section>
+
+  <section id="products" class="section">
+    <div class="section-header">
+      <div><div class="label">Digital Products</div><h2 class="section-title">Things I've <span>shipped.</span></h2></div>
+      <a class="view-all" href="https://payhip.com/lucyb0207" target="_blank">Payhip store →</a>
+    </div>
+    <div class="products-grid">
+      <a class="prod-card fade-up" href="https://payhip.com/b/YMGmh" target="_blank">
+        <div class="prod-cover"><div class="prod-cover-bg"></div><span style="position:relative;z-index:1;font-size:42px;">🐛</span></div>
+        <div class="prod-body"><div class="prod-name">Stop Guessing: A Guide To Debugging Anything</div><div class="prod-price">£6.99</div></div>
+      </a>
+      <a class="prod-card fade-up" href="https://payhip.com/lucyb0207" target="_blank">
+        <div class="prod-cover"><div class="prod-cover-bg"></div><span style="position:relative;z-index:1;font-size:42px;">📦</span></div>
+        <div class="prod-body"><div class="prod-name">More products coming soon</div><div class="prod-price prod-placeholder">Stay tuned</div></div>
+      </a>
+      <a class="prod-card fade-up" href="https://www.patreon.com/LucyBuilds" target="_blank">
+        <div class="prod-cover"><div class="prod-cover-bg"></div><span style="position:relative;z-index:1;font-size:42px;">✨</span></div>
+        <div class="prod-body"><div class="prod-name">Support the work & follow along</div><div class="prod-price prod-placeholder">patreon.com/LucyBuilds</div></div>
+      </a>
+    </div>
+  </section>
+
+  <section id="contact" class="section">
+    <div class="contact-layout">
+      <div class="fade-up">
+        <div class="label">Contact</div>
+        <h2 class="contact-big">Let's <span>talk.</span></h2>
+        <p class="contact-desc">I'm always happy to hear from interesting people: whether it's a project idea, a collaboration, or just a hello.</p>
+        <a class="contact-email-link" href="mailto:lucyb0207@icloud.com">lucyb0207@icloud.com →</a>
+        <div class="socials-grid">
+          <a class="social-pill" href="https://github.com/lucyb0207" target="_blank">GitHub</a>
+          <a class="social-pill" href="https://twitter.com/lucyb0207" target="_blank">Twitter / X</a>
+          <a class="social-pill" href="https://linkedin.com/in/lucybatten" target="_blank">LinkedIn</a>
+          <a class="social-pill" href="https://lucybatten.substack.com" target="_blank">Substack</a>
+          <a class="social-pill" href="https://www.youtube.com/@lucyb0207" target="_blank">YouTube</a>
+          <a class="social-pill" href="https://www.patreon.com/LucyBuilds" target="_blank">Patreon</a>
+        </div>
+      </div>
+      <div class="fade-up">
+        <div class="contact-illustration">
+          <div class="ci-comment">// Lucy Batten... get in touch</div>
+          &nbsp;
+          <div><span class="ci-key">const</span> lucy = <span class="ci-brace">{</span></div>
+          <div>&nbsp;&nbsp;email: <span class="ci-str">"lucyb0207@icloud.com"</span>,</div>
+          <div>&nbsp;&nbsp;status: <span class="ci-str">"open to opportunities"</span>,</div>
+          <div>&nbsp;&nbsp;responseTime: <span class="ci-str">"usually within 24h"</span>,</div>
+          <div>&nbsp;&nbsp;likesCollabs: <span class="ci-bool">true</span>,</div>
+          <div>&nbsp;&nbsp;drinkOfChoice: <span class="ci-str">"coffee ☕"</span>,</div>
+          <div><span class="ci-brace">}</span></div>
+          &nbsp;
+          <div><span class="ci-comment">// say hi! 👋</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-left">© 2026 Lucy Batten — Built with ❤️ in the UK</div>
+  <div class="footer-right">
+    <a href="https://github.com/lucyb0207" target="_blank">GitHub</a>
+    <a href="https://lucybatten.substack.com" target="_blank">Substack</a>
+    <a href="https://www.youtube.com/@lucyb0207" target="_blank">YouTube</a>
+    <a href="https://payhip.com/lucyb0207" target="_blank">Products</a>
+  </div>
+</footer>
+
+<script>
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.width='6px';cursor.style.height='6px';ring.style.width='50px';ring.style.height='50px';});
+  el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
+});
+
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+let W,H;
+const COLS=['#FF9A5C','#FF6B6B','#C96FD8','#FFD166','#FF8FA3','#E8772A'];
+const pts=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+window.addEventListener('resize',resize);resize();
+function P(){this.x=Math.random()*W;this.y=Math.random()*H;this.s=Math.random()*1.6+.3;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.o=Math.random()*.55+.08;this.c=COLS[Math.floor(Math.random()*COLS.length)];}
+for(let i=0;i<90;i++)pts.push(new P());
+function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle=p.c;ctx.globalAlpha=p.o;ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;});ctx.globalAlpha=1;requestAnimationFrame(draw);}
+draw();
+
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+const l3=document.querySelector('.hero-name .line3');
+const txt='& Creator.';l3.textContent='';let ci=0;
+setTimeout(()=>{const t=setInterval(()=>{l3.textContent+=txt[ci++];if(ci>=txt.length)clearInterval(t);},80);},800);
+</script>
+
+</body>
+</html>
