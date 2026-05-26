@@ -11,21 +11,28 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:     #0D0A0F;
-      --bg2:    #130F16;
-      --bg3:    #1A1420;
-      --card:   #1F1828;
-      --border:  rgba(255,180,120,0.08);
-      --border2: rgba(255,180,120,0.18);
-      --text:   #F5EEE8;
-      --muted:  #9A8A80;
-      --faint:  #4E3F3A;
-      --sun:    #FF9A5C;
-      --sun2:   #E8772A;
-      --dusk:   #FF6B6B;
-      --magenta:#C96FD8;
-      --gold:   #FFD166;
-      --blush:  #FF8FA3;
+      /* Dark Backgrounds */
+      --bg:     #0A0612; /* Main background, near-black with a deep purple hue */
+      --bg2:    #110B1E; /* Secondary background, a touch lighter */
+      --bg3:    #211737; /* Terminal background for maximum contrast */
+      --card:   #281C42; /* Dark card background, pops neatly over --bg */
+      
+      /* Subtle Neon Borders (Cyan tint with high transparency) */
+      --border:  rgba(151, 223, 252, 0.05); 
+      --border2: rgba(151, 223, 252, 0.15); 
+      
+      /* High-Contrast Typography */
+      --text:   #F5F7FA; /* Crisp, ice-white */
+      --muted:  #A2B2C3; /* Bluish-grey for clean readability on secondary text */
+      --faint:  #5A6684; /* Muted grey for UI details like line numbers */
+      
+      /* Glowing Accent Colors (Directly mapped from your palette) */
+      --sun:    #97DFFC; /* Vibrant cyan (links, logos, and focal points) */
+      --sun2:   #93CAF6; /* Sky blue for hover states */
+      --dusk:   #858AE3; /* Soft lavender for decorative highlights */
+      --magenta:#93CAF6; /* JSON KEYS: Swapped to sky blue for stark contrast */
+      --gold:   #97DFFC; /* BOOLEAN VALUES: High-visibility glowing cyan */
+      --blush:  #C3B6FF; /* STRINGS: Clean, pastel lavender for terminal code */
       --r: 10px;
     }
 
@@ -66,7 +73,7 @@
       position: fixed; top:0; left:0; right:0; z-index:100;
       display:flex; justify-content:space-between; align-items:center;
       padding: 0 3rem; height: 60px;
-      background: rgba(13,10,15,.88);
+      background: rgba(10, 6, 18, 0.85);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border);
     }
@@ -250,18 +257,6 @@
     .platform-card.li:hover .platform-link { color:var(--sun); }
     .platform-card.pt:hover .platform-link { color:var(--blush); }
 
-    /* PRODUCTS */
-    #products { border-top:1px solid var(--border); }
-    .products-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
-    .prod-card { background:var(--card); border:1px solid var(--border); border-radius:12px; overflow:hidden; text-decoration:none; display:block; transition:all .3s; }
-    .prod-card:hover { border-color:var(--magenta); transform:translateY(-3px); }
-    .prod-cover { height:140px; display:flex; align-items:center; justify-content:center; background:var(--bg3); border-bottom:1px solid var(--border); font-size:40px; position:relative; overflow:hidden; }
-    .prod-cover-bg { position:absolute; inset:0; background:radial-gradient(ellipse at center,rgba(201,111,216,.15) 0%,transparent 70%); }
-    .prod-body { padding:1.2rem; }
-    .prod-name { font-size:15px; font-weight:700; color:var(--text); margin-bottom:4px; letter-spacing:-.01em; }
-    .prod-price { font-family:'Space Mono',monospace; font-size:13px; color:var(--magenta); }
-    .prod-placeholder { color:var(--faint); font-size:13px; }
-
     /* CONTACT */
     #contact { border-top:1px solid var(--border); }
     .contact-layout { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; }
@@ -294,7 +289,6 @@
       .about-layout { grid-template-columns:1fr; gap:2.5rem; }
       .projects-grid { grid-template-columns:1fr; }
       .social-platforms { grid-template-columns:1fr 1fr; }
-      .products-grid { grid-template-columns:1fr; }
       .contact-layout { grid-template-columns:1fr; }
       .post-preview-col { display:none; }
       footer { flex-direction:column; gap:12px; text-align:center; }
@@ -309,13 +303,12 @@
 <canvas id="canvas"></canvas>
 
 <nav>
-  <a class="nav-logo" href="#top">juan<span>.dev</span></a>
+  <a class="nav-logo" href="#top">JJv03<span>.dev</span></a>
   <div class="nav-links">
     <a href="#about">About</a>
-    <a href="#projects">Projects</a>
-    <a href="#writing">Writing</a>
+    <!-- <a href="#projects">Projects</a> -->
+    <!-- <a href="#writing">Writing</a> -->
     <a href="#social">Social</a>
-    <a href="#products">Products</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -380,7 +373,7 @@
         </div>
       </div>
       <div class="fade-up">
-        <p class="about-text">I'm a <strong>Computer Science graduate</strong> and researcher currently pursuing a Master's in <strong>Robotics, Graphics, and Computer Vision</strong> at EINA-UNIZAR. I focus on bridging the gap between intelligent software and physical systems.</p>
+        <p class="about-text">Hello there, I'm a <strong>Computer Science graduate</strong> and researcher currently pursuing a Master's in <strong>Robotics, Graphics, and Computer Vision</strong> at EINA-UNIZAR. I focus on bridging the gap between intelligent software and physical systems.</p>
         <p class="about-text">To date, I have developed several end-to-end projects, including building a complete videogame from scratch utilizing low-level C libraries. Currently, I am merging software and hardware by building a functioning replica of Star Wars' BB-8 robot, alongside developing a camera-based computer vision controller for interactive gaming.</p>
         <p class="about-text">Always open to interesting conversations, collabs, and cool opportunities.</p>
         <div class="skill-list">
@@ -405,6 +398,7 @@
     </div>
   </section>
 
+<!--
   <section id="projects" class="section">
     <div class="section-header">
       <div><div class="label">Projects</div><h2 class="section-title">What I've <span>built.</span></h2></div>
@@ -430,8 +424,10 @@
         <div class="proj-footer"><span class="proj-tag tag-web">Web App</span><span class="proj-arrow">↗</span></div>
       </a>
     </div>
-  </section>
+  </section> 
+-->
 
+<!--
   <section id="writing" class="section">
     <div class="section-header">
       <div><div class="label">Writing</div><h2 class="section-title">From the <span>newsletter.</span></h2></div>
@@ -460,7 +456,8 @@
     <div class="writing-cta">
       <a class="btn-primary" href="https://lucybatten.substack.com" target="_blank">Subscribe on Substack</a>
     </div>
-  </section>
+  </section> 
+-->
 
   <!-- SOCIAL MEDIA -->
   <section id="social" class="section">
@@ -469,93 +466,28 @@
     </div>
     <div class="social-platforms">
 
-      <a class="platform-card yt fade-up" href="https://www.youtube.com/@lucyb0207" target="_blank" rel="noopener">
+      <a class="platform-card gh fade-up" href="https://github.com/JJv03" target="_blank" rel="noopener">
         <div class="platform-top">
-          <div class="platform-icon yt-ic">📺</div>
-          <span class="platform-badge badge-yt">Videos</span>
-        </div>
-        <div class="platform-name">YouTube</div>
-        <div class="platform-handle">@lucyb0207</div>
-        <div class="platform-desc">Dev tutorials, project walkthroughs, and honest takes on learning to code. Higher quality content coming soon.</div>
-        <div class="platform-link">youtube.com/@lucyb0207 →</div>
-      </a>
-
-      <a class="platform-card gh fade-up" href="https://github.com/lucyb0207" target="_blank" rel="noopener">
-        <div class="platform-top">
-          <div class="platform-icon gh-ic">🐙</div>
+          <div class="platform-icon gh-ic">👾</div>
           <span class="platform-badge badge-gh">Code</span>
         </div>
         <div class="platform-name">GitHub</div>
-        <div class="platform-handle">@lucyb0207</div>
-        <div class="platform-desc">Open source projects, tools I've built, and the code behind everything I ship.</div>
-        <div class="platform-link">github.com/lucyb0207 →</div>
+        <div class="platform-handle">@JJv03</div>
+        <div class="platform-desc">A collection of open-source projects where I've participated or developed.</div>
+        <div class="platform-link">github.com/JJv03 →</div>
       </a>
 
-      <a class="platform-card ss fade-up" href="https://lucybatten.substack.com" target="_blank" rel="noopener">
-        <div class="platform-top">
-          <div class="platform-icon ss-ic">✉️</div>
-          <span class="platform-badge badge-ss">Newsletter</span>
-        </div>
-        <div class="platform-name">Substack</div>
-        <div class="platform-handle">lucybatten.substack.com</div>
-        <div class="platform-desc">Writing about software, learning, and building things in public. New posts every month.</div>
-        <div class="platform-link">lucybatten.substack.com →</div>
-      </a>
-
-      <a class="platform-card tw fade-up" href="https://twitter.com/lucyb0207" target="_blank" rel="noopener">
-        <div class="platform-top">
-          <div class="platform-icon tw-ic">𝕏</div>
-          <span class="platform-badge badge-tw">Updates</span>
-        </div>
-        <div class="platform-name">Twitter / X</div>
-        <div class="platform-handle">@lucyb0207</div>
-        <div class="platform-desc">Quick thoughts, dev hot takes, and live updates on what I'm building right now.</div>
-        <div class="platform-link">twitter.com/lucyb0207 →</div>
-      </a>
-
-      <a class="platform-card li fade-up" href="https://linkedin.com/in/lucybatten" target="_blank" rel="noopener">
+      <a class="platform-card li fade-up" href="https://www.linkedin.com/in/juan-valle-morenilla-0ab5b7231" target="_blank" rel="noopener">
         <div class="platform-top">
           <div class="platform-icon li-ic">💼</div>
           <span class="platform-badge badge-li">Professional</span>
         </div>
         <div class="platform-name">LinkedIn</div>
-        <div class="platform-handle">in/lucybatten</div>
-        <div class="platform-desc">Professional updates, career milestones, and connecting with other developers.</div>
-        <div class="platform-link">linkedin.com/in/lucybatten →</div>
+        <div class="platform-handle">in/juanvallemorenilla</div>
+        <div class="platform-desc">Following my professional journey, key career achievements, and connecting with the wider developer community.</div>
+        <div class="platform-link">linkedin.com/in/juanvallemorenilla →</div>
       </a>
 
-      <a class="platform-card pt fade-up" href="https://www.patreon.com/LucyBuilds" target="_blank" rel="noopener">
-        <div class="platform-top">
-          <div class="platform-icon pt-ic">🎨</div>
-          <span class="platform-badge badge-pt">Support</span>
-        </div>
-        <div class="platform-name">Patreon</div>
-        <div class="platform-handle">LucyBuilds</div>
-        <div class="platform-desc">Support the work and get early access to tutorials, resources, and behind-the-scenes content.</div>
-        <div class="platform-link">patreon.com/LucyBuilds →</div>
-      </a>
-
-    </div>
-  </section>
-
-  <section id="products" class="section">
-    <div class="section-header">
-      <div><div class="label">Digital Products</div><h2 class="section-title">Things I've <span>shipped.</span></h2></div>
-      <a class="view-all" href="https://payhip.com/lucyb0207" target="_blank">Payhip store →</a>
-    </div>
-    <div class="products-grid">
-      <a class="prod-card fade-up" href="https://payhip.com/b/YMGmh" target="_blank">
-        <div class="prod-cover"><div class="prod-cover-bg"></div><span style="position:relative;z-index:1;font-size:42px;">🐛</span></div>
-        <div class="prod-body"><div class="prod-name">Stop Guessing: A Guide To Debugging Anything</div><div class="prod-price">£6.99</div></div>
-      </a>
-      <a class="prod-card fade-up" href="https://payhip.com/lucyb0207" target="_blank">
-        <div class="prod-cover"><div class="prod-cover-bg"></div><span style="position:relative;z-index:1;font-size:42px;">📦</span></div>
-        <div class="prod-body"><div class="prod-name">More products coming soon</div><div class="prod-price prod-placeholder">Stay tuned</div></div>
-      </a>
-      <a class="prod-card fade-up" href="https://www.patreon.com/LucyBuilds" target="_blank">
-        <div class="prod-cover"><div class="prod-cover-bg"></div><span style="position:relative;z-index:1;font-size:42px;">✨</span></div>
-        <div class="prod-body"><div class="prod-name">Support the work & follow along</div><div class="prod-price prod-placeholder">patreon.com/LucyBuilds</div></div>
-      </a>
     </div>
   </section>
 
@@ -564,30 +496,26 @@
       <div class="fade-up">
         <div class="label">Contact</div>
         <h2 class="contact-big">Let's <span>talk.</span></h2>
-        <p class="contact-desc">I'm always happy to hear from interesting people: whether it's a project idea, a collaboration, or just a hello.</p>
-        <a class="contact-email-link" href="mailto:lucyb0207@icloud.com">lucyb0207@icloud.com →</a>
+        <p class="contact-desc">Always down to chat about interesting projects, potential collaborations, or just talk shop. Drop me a line!</p>
+        <a class="contact-email-link" href="mailto:juanvalle2003@gmail.com">juanvalle2003@gmail.com →</a>
         <div class="socials-grid">
-          <a class="social-pill" href="https://github.com/lucyb0207" target="_blank">GitHub</a>
-          <a class="social-pill" href="https://twitter.com/lucyb0207" target="_blank">Twitter / X</a>
-          <a class="social-pill" href="https://linkedin.com/in/lucybatten" target="_blank">LinkedIn</a>
-          <a class="social-pill" href="https://lucybatten.substack.com" target="_blank">Substack</a>
-          <a class="social-pill" href="https://www.youtube.com/@lucyb0207" target="_blank">YouTube</a>
-          <a class="social-pill" href="https://www.patreon.com/LucyBuilds" target="_blank">Patreon</a>
+          <a class="social-pill" href="https://github.com/JJv03" target="_blank">GitHub</a>
+          <a class="social-pill" href="https://www.linkedin.com/in/juan-valle-morenilla-0ab5b7231" target="_blank">LinkedIn</a>
         </div>
       </div>
       <div class="fade-up">
         <div class="contact-illustration">
-          <div class="ci-comment">// Lucy Batten... get in touch</div>
+          <div class="ci-comment">// Juan Valle get in touch</div>
           &nbsp;
-          <div><span class="ci-key">const</span> lucy = <span class="ci-brace">{</span></div>
-          <div>&nbsp;&nbsp;email: <span class="ci-str">"lucyb0207@icloud.com"</span>,</div>
+          <div><span class="ci-key">const</span> Juan = <span class="ci-brace">{</span></div>
+          <div>&nbsp;&nbsp;email: <span class="ci-str">"juanvalle2003@gmail.com"</span>,</div>
           <div>&nbsp;&nbsp;status: <span class="ci-str">"open to opportunities"</span>,</div>
           <div>&nbsp;&nbsp;responseTime: <span class="ci-str">"usually within 24h"</span>,</div>
           <div>&nbsp;&nbsp;likesCollabs: <span class="ci-bool">true</span>,</div>
           <div>&nbsp;&nbsp;drinkOfChoice: <span class="ci-str">"coffee ☕"</span>,</div>
           <div><span class="ci-brace">}</span></div>
           &nbsp;
-          <div><span class="ci-comment">// say hi! 👋</span></div>
+          <div><span class="ci-comment">// Don't forget to say hello :D</span></div>
         </div>
       </div>
     </div>
@@ -596,12 +524,10 @@
 </main>
 
 <footer>
-  <div class="footer-left">© 2026 Lucy Batten — Built with ❤️ in the UK</div>
+  <div class="footer-left">© <span id="current-year"></span> Juan Valle</div>
   <div class="footer-right">
-    <a href="https://github.com/lucyb0207" target="_blank">GitHub</a>
-    <a href="https://lucybatten.substack.com" target="_blank">Substack</a>
-    <a href="https://www.youtube.com/@lucyb0207" target="_blank">YouTube</a>
-    <a href="https://payhip.com/lucyb0207" target="_blank">Products</a>
+    <a href="https://github.com/JJv03" target="_blank">GitHub</a>
+    <a href="https://www.linkedin.com/in/juan-valle-morenilla-0ab5b7231" target="_blank">LinkedIn</a>
   </div>
 </footer>
 
@@ -649,6 +575,10 @@ setTimeout(()=>{const t=setInterval(()=>{l3.textContent+=txt[ci++];if(ci>=txt.le
       experienceContainer.textContent = yearsOfExperience;
     }
   });
+</script>
+
+<script>
+  document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
 
 </body>
