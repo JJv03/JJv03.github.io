@@ -170,8 +170,58 @@
     .projects-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
     .proj-card {
       background:var(--card); border:1px solid var(--border); border-radius:12px; padding:2rem;
-      text-decoration:none; display:block; position:relative; overflow:hidden; transition:all .3s;
+      cursor: pointer; display:block; position:relative; overflow:hidden; transition:all .3s;
     }
+
+    /* MODAL */
+    .modal-overlay {
+      position:fixed; inset:0; z-index:1000;
+      background:rgba(5, 2, 12, 0.82);
+      backdrop-filter:blur(12px);
+      display:flex; align-items:center; justify-content:center;
+      padding:2rem;
+      opacity:0; visibility:hidden;
+      transition:opacity .3s ease, visibility .3s ease;
+    }
+    .modal-overlay.open { opacity:1; visibility:visible; }
+    .modal-panel {
+      background:var(--bg2); border:1px solid var(--border2);
+      border-radius:20px; max-width:640px; width:100%;
+      position:relative; overflow:hidden;
+      transform:translateY(24px) scale(.97);
+      transition:transform .35s cubic-bezier(.22,1,.36,1);
+      max-height:90vh; overflow-y:auto;
+    }
+    .modal-panel::before {
+      content:''; position:absolute; top:0; left:0; right:0; height:2px;
+      background:linear-gradient(90deg,var(--sun),var(--dusk),var(--magenta));
+    }
+    .modal-overlay.open .modal-panel { transform:translateY(0) scale(1); }
+    .modal-close {
+      position:absolute; top:1.2rem; right:1.2rem;
+      background:var(--card); border:1px solid var(--border2);
+      color:var(--muted); width:32px; height:32px; border-radius:50%;
+      font-size:13px; cursor:none; display:flex; align-items:center; justify-content:center;
+      transition:all .2s; z-index:1;
+    }
+    .modal-close:hover { background:var(--sun); color:var(--bg); border-color:var(--sun); }
+    .modal-inner { padding:2.5rem; }
+    .modal-meta { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); letter-spacing:.1em; margin-bottom:1rem; }
+    .modal-title { font-size:clamp(22px,3vw,32px); font-weight:800; letter-spacing:-.03em; margin-bottom:1.5rem; color:var(--text); }
+    .modal-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:1.8rem; }
+    .modal-tag { font-family:'Space Mono',monospace; font-size:10px; padding:5px 12px; border-radius:4px; border:1px solid var(--border2); color:var(--muted); background:var(--bg3); letter-spacing:.04em; }
+    .modal-desc { font-size:15px; color:var(--muted); line-height:1.8; margin-bottom:2rem; }
+    .modal-highlights { display:flex; flex-direction:column; gap:10px; margin-bottom:2rem; }
+    .modal-highlight-item {
+      display:flex; align-items:flex-start; gap:10px;
+      font-size:13px; color:var(--muted); line-height:1.5;
+    }
+    .modal-highlight-item::before {
+      content:'→'; color:var(--sun); font-family:'Space Mono',monospace;
+      font-size:11px; flex-shrink:0; margin-top:2px;
+    }
+    .modal-actions { display:flex; gap:12px; flex-wrap:wrap; }
+
     .proj-card::before {
       content:''; position:absolute; top:0; left:0; right:0; height:2px;
       background:linear-gradient(90deg,var(--sun),var(--dusk),var(--magenta));
@@ -307,7 +357,7 @@
   <a class="nav-logo" href="#top">JJv03<span>.dev</span></a>
   <div class="nav-links">
     <a href="#about">About</a>
-    <!-- <a href="#projects">Projects</a> -->
+    <a href="#projects">Projects</a>
     <!-- <a href="#writing">Writing</a> -->
     <a href="#social">Social</a>
     <a href="#contact">Contact</a>
@@ -345,7 +395,9 @@
             <span class="term-line">&nbsp;&nbsp;<span class="term-key">"location"</span>: <span class="term-str">"Spain 🇪🇸"</span>,</span>
             <span class="term-line">&nbsp;&nbsp;<span class="term-key">"role"</span>: <span class="term-str">"Software Engineer"</span>,</span>
             <span class="term-line">&nbsp;&nbsp;<span class="term-key">"technologies"</span>: <span class="term-brace">[</span></span>
-            <span class="term-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">"Python"</span>, <span class="term-str">"C++"</span>, <span class="term-str">"C"</span>, <span class="term-str">"ROS"</span>, <span class="term-str">"OpenCV"</span></span>
+            <span class="term-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-str">"Python"</span>, <span class="term-str">"C++"</span>, 
+                                                            <span class="term-str">"C"</span>, <span class="term-str">"ROS"</span>, 
+                                                            <span class="term-str">"OpenCV"</span>, <span class="term-str">"Gymnasium"</span></span>
             <span class="term-line">&nbsp;&nbsp;<span class="term-brace">]</span>,</span>
             <span class="term-line">&nbsp;&nbsp;<span class="term-key">"research"</span>: <span class="term-val">true</span>,</span>
             <span class="term-line">&nbsp;&nbsp;<span class="term-key">"creator"</span>: <span class="term-val">true</span>,</span>
@@ -399,34 +451,47 @@
     </div>
   </section>
 
-<!--
   <section id="projects" class="section">
     <div class="section-header">
       <div><div class="label">Projects</div><h2 class="section-title">What I've <span>built.</span></h2></div>
-      <a class="view-all" href="https://github.com/lucyb0207" target="_blank">GitHub →</a>
+      <a class="view-all" href="https://github.com/JJv03" target="_blank">GitHub →</a>
     </div>
     <div class="projects-grid">
-      <a class="proj-card fade-up" href="https://github.com/lucyb0207/CodeAtlas" target="_blank">
+
+      <div class="proj-card fade-up"
+        data-title="TFG - DeepRacer Simulation"
+        data-number="01 / Open Source"
+        data-tag="Open Source"
+        data-tag-class="tag-oss"
+        data-github="https://github.com/JJv03/deepracer_simulation"
+        data-tech="Python,ROS,Gazebo,Stable Baselines3, Gymnasium"
+        data-desc="Full simulation of an autonomous driving agent inspired by AWS DeepRacer using reinforcement learning. The project trains and evaluates a self-driving model inside a ROS and Gazebo simulated environment, applying RL techniques to optimize vehicle trajectory and racing performance."
+        data-highlights="3D simulation environment with Gazebo · Reinforcement Learning agent architecture with Stable Baselines3 · Full ROS integration · Adaptable Gymnasium environment">
         <div class="proj-number">01 / Open Source</div>
-        <div class="proj-title">CodeAtlas</div>
-        <div class="proj-desc">Visualise GitHub repos as interactive dependency graphs. Navigate your codebase like a map.</div>
+        <div class="proj-title">TFG - DeepRacer Simulation</div>
+        <div class="proj-desc">An autonomous agent trained with reinforcement learning taking as reference AWS DeepRacer in a simulated ROS + Gazebo environment.</div>
         <div class="proj-footer"><span class="proj-tag tag-oss">Open Source</span><span class="proj-arrow">↗</span></div>
-      </a>
-      <a class="proj-card fade-up" href="https://toxic-ai-code-reviewer.vercel.app/" target="_blank">
-        <div class="proj-number">02 / Open Source</div>
-        <div class="proj-title">ToxicAI Code Roaster</div>
-        <div class="proj-desc">An AI that reviews your code with brutally honest, and very funny feedback. Pain is growth.</div>
-        <div class="proj-footer"><span class="proj-tag tag-oss">Open Source</span><span class="proj-arrow">↗</span></div>
-      </a>
-      <a class="proj-card fade-up" href="https://devflow-sand-eta.vercel.app/" target="_blank">
-        <div class="proj-number">03 / Web App</div>
-        <div class="proj-title">DevFlow</div>
-        <div class="proj-desc">A second brain for developers. Capture ideas, snippets, and thoughts without breaking your flow state.</div>
-        <div class="proj-footer"><span class="proj-tag tag-web">Web App</span><span class="proj-arrow">↗</span></div>
-      </a>
+      </div>
+
     </div>
-  </section> 
--->
+  </section>
+
+  <!-- PROJECT MODAL -->
+  <div id="proj-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-panel">
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div class="modal-inner">
+        <div class="modal-meta" id="modal-number"></div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-tags" id="modal-tech"></div>
+        <p class="modal-desc" id="modal-desc"></p>
+        <div class="modal-highlights" id="modal-highlights"></div>
+        <div class="modal-actions">
+          <a class="btn-primary" id="modal-github" href="#" target="_blank" rel="noopener">Ver en GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+  </div> 
 
 <!--
   <section id="writing" class="section">
@@ -582,5 +647,62 @@
   document.getElementById('current-year').textContent = new Date().getFullYear();
 </script>
 
+<script>
+  // Project Modal
+  const overlay = document.getElementById('proj-modal');
+  const closeBtn = document.getElementById('modal-close');
+
+  function openModal(card) {
+    document.getElementById('modal-number').textContent   = card.dataset.number;
+    document.getElementById('modal-title').textContent    = card.dataset.title;
+    document.getElementById('modal-desc').textContent     = card.dataset.desc;
+    document.getElementById('modal-github').href          = card.dataset.github;
+
+    // Tech tags
+    const techEl = document.getElementById('modal-tech');
+    techEl.innerHTML = '';
+    card.dataset.tech.split(',').forEach(t => {
+      const span = document.createElement('span');
+      span.className = 'modal-tag';
+      span.textContent = t.trim();
+      techEl.appendChild(span);
+    });
+
+    // Highlights
+    const hlEl = document.getElementById('modal-highlights');
+    hlEl.innerHTML = '';
+    card.dataset.highlights.split('·').forEach(h => {
+      const div = document.createElement('div');
+      div.className = 'modal-highlight-item';
+      div.textContent = h.trim();
+      hlEl.appendChild(div);
+    });
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.proj-card[data-title]').forEach(card => {
+    card.addEventListener('click', () => openModal(card));
+  });
+
+  closeBtn.addEventListener('click', closeModal);
+  overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  // Make modal-close respond to cursor effects
+  document.querySelectorAll('a,button').forEach(el=>{
+    if (!el.dataset.cursorBound) {
+      el.dataset.cursorBound = true;
+      el.addEventListener('mouseenter',()=>{cursor.style.width='6px';cursor.style.height='6px';ring.style.width='50px';ring.style.height='50px';});
+      el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
+    }
+  });
+</script>
 </body>
 </html>
