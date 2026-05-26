@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Juan Valle — Software Engineer</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -532,34 +533,34 @@
 </footer>
 
 <script>
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
-(function anim(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
-document.querySelectorAll('a,button').forEach(el=>{
-  el.addEventListener('mouseenter',()=>{cursor.style.width='6px';cursor.style.height='6px';ring.style.width='50px';ring.style.height='50px';});
-  el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
-});
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  (function anim(){rx+=(mx-rx)*.14;ry+=(my-ry)*.14;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+  document.querySelectorAll('a,button').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='6px';cursor.style.height='6px';ring.style.width='50px';ring.style.height='50px';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='12px';cursor.style.height='12px';ring.style.width='36px';ring.style.height='36px';});
+  });
 
-const canvas=document.getElementById('canvas');
-const ctx=canvas.getContext('2d');
-let W,H;
-const COLS=['#FF9A5C','#FF6B6B','#C96FD8','#FFD166','#FF8FA3','#E8772A'];
-const pts=[];
-function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
-window.addEventListener('resize',resize);resize();
-function P(){this.x=Math.random()*W;this.y=Math.random()*H;this.s=Math.random()*1.6+.3;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.o=Math.random()*.55+.08;this.c=COLS[Math.floor(Math.random()*COLS.length)];}
-for(let i=0;i<90;i++)pts.push(new P());
-function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle=p.c;ctx.globalAlpha=p.o;ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;});ctx.globalAlpha=1;requestAnimationFrame(draw);}
-draw();
+  const canvas=document.getElementById('canvas');
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  const COLS=['#FF9A5C','#FF6B6B','#C96FD8','#FFD166','#FF8FA3','#E8772A'];
+  const pts=[];
+  function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight;}
+  window.addEventListener('resize',resize);resize();
+  function P(){this.x=Math.random()*W;this.y=Math.random()*H;this.s=Math.random()*1.6+.3;this.vx=(Math.random()-.5)*.3;this.vy=(Math.random()-.5)*.3;this.o=Math.random()*.55+.08;this.c=COLS[Math.floor(Math.random()*COLS.length)];}
+  for(let i=0;i<90;i++)pts.push(new P());
+  function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fillStyle=p.c;ctx.globalAlpha=p.o;ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;});ctx.globalAlpha=1;requestAnimationFrame(draw);}
+  draw();
 
-const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
-document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+  const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),i*80);});},{threshold:.1});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
 
-const l3=document.querySelector('.hero-name .line3');
-const txt='Research.';l3.textContent='';let ci=0;
-setTimeout(()=>{const t=setInterval(()=>{l3.textContent+=txt[ci++];if(ci>=txt.length)clearInterval(t);},80);},800);
+  const l3=document.querySelector('.hero-name .line3');
+  const txt='Research.';l3.textContent='';let ci=0;
+  setTimeout(()=>{const t=setInterval(()=>{l3.textContent+=txt[ci++];if(ci>=txt.length)clearInterval(t);},80);},800);
 </script>
 
 <script>
