@@ -421,7 +421,10 @@
               <div class="stat-label">Years building</div>
           </div>
           <div class="stat-card fade-up"><div class="stat-num">0</div><div class="stat-label">Papers published</div></div>
-          <div class="stat-card fade-up"><div class="stat-num">1</div><div class="stat-label">Interesting proyects completed</div></div>
+          <div class="stat-card fade-up">
+            <div class="stat-num" id="projects-count">0</div>
+            <div class="stat-label">Interesting projects completed</div>
+          </div>
           <div class="stat-card fade-up"><div class="stat-num">999+</div><div class="stat-label">Liters of coffee consumed</div></div>
         </div>
       </div>
@@ -459,18 +462,36 @@
     <div class="projects-grid">
 
       <div class="proj-card fade-up"
-        data-title="TFG - DeepRacer Simulation"
-        data-number="01 / Open Source"
-        data-tag="Open Source"
+        data-title="DeepRacer Simulation"
+        data-number="01 / TFG"
+        data-tag="TFG"
         data-tag-class="tag-oss"
         data-github="https://github.com/JJv03/deepracer_simulation"
+        data-doc="https://zaguan.unizar.es/record/164802"
         data-tech="Python,ROS,Gazebo,Stable Baselines3, Gymnasium"
-        data-desc="Full simulation of an autonomous driving agent inspired by AWS DeepRacer using reinforcement learning. The project trains and evaluates a self-driving model inside a ROS and Gazebo simulated environment, applying RL techniques to optimize vehicle trajectory and racing performance."
-        data-highlights="3D simulation environment with Gazebo · Reinforcement Learning agent architecture with Stable Baselines3 · Full ROS integration · Adaptable Gymnasium environment">
-        <div class="proj-number">01 / Open Source</div>
+        data-desc="Local reinforcement learning simulation inspired by AWS DeepRacer, built entirely with ROS and Gazebo. The project creates a fully offline autonomous driving environment where custom tracks and vehicles are simulated, allowing training and evaluation of self-driving agents without relying on cloud services. Gymnasium is used to process sensor data from Gazebo (such as position and velocity) and to implement a custom reinforcement learning environment with reward shaping. Training and testing workflows are managed through ROS launch files."
+        data-highlights="Fully offline DeepRacer-style simulation using ROS and Gazebo · Custom Gymnasium environment with real-time sensor processing · Highly adaptable RL setup, compatible with multiple Stable Baselines3 algorithms thanks to Gymnasium integration · Reinforcement learning training pipeline with Stable Baselines3 · ROS launch-based training and evaluation workflows · TensorBoard integration for training monitoring · Python-based tooling and visualization scripts">
+        <div class="proj-number">01 / TFG</div>
         <div class="proj-title">TFG - DeepRacer Simulation</div>
-        <div class="proj-desc">An autonomous agent trained with reinforcement learning taking as reference AWS DeepRacer in a simulated ROS + Gazebo environment.</div>
-        <div class="proj-footer"><span class="proj-tag tag-oss">Open Source</span><span class="proj-arrow">↗</span></div>
+        <div class="proj-desc">A fully local DeepRacer-like reinforcement learning system built with ROS and Gazebo, enabling autonomous vehicle training and evaluation without cloud dependencies.</div>
+        <div class="proj-footer"><span class="proj-tag tag-oss">TFG</span><span class="proj-arrow">↗</span></div>
+      </div>
+
+      <div class="proj-card fade-up"
+        data-title="Castlevania remake"
+        data-number="02 / University project"
+        data-tag="University project"
+        data-tag-class="tag-oss"
+        data-github="https://github.com/JJv03/Videojuegos-2DGame"
+        data-tech="C++, SFML, Multithreading, Game Architecture, AI Systems"
+        data-desc="2D action-platformer developed from scratch in C++ without using any game engines, as part of a university project. The game is a reimagining of Castlevania built using SFML for rendering, audio, and input handling, with additional use of standard C++ libraries such as threads to manage concurrent systems.
+                  The project includes a fully interactive main menu with configurable controls, audio settings, and gameplay options, as well as an introductory animated sequence. Enemy AI was implemented after a detailed analysis of original Castlevania behavior patterns, including movement, attack timing, and damage systems.
+                  Boss enemies feature a more advanced AI system beyond a simple finite state machine, introducing layered behaviors and increased complexity when enabled through the menu. Additional features include custom player skins and a modular architecture designed to support scalability and reuse."
+        data-highlights=" 100% C++ game built without engines (like Unity or Godot) · SFML-based rendering, audio and input system · Multithreaded architecture for parallel game systems · Fully interactive menu (controls remapping, audio settings, gameplay options) · New custom intro animation sequence · Enemy AI based on behavioral analysis of Castlevania patterns · Advanced boss AI with layered decision-making beyond basic state machines · Added two customizable bosses skins · Modular and scalable game architecture">
+        <div class="proj-number">02 / University project</div>
+        <div class="proj-title">Castlevania remade</div>
+        <div class="proj-desc">2D Castlevania-inspired game built entirely in C++ with SFML, featuring custom engine-level systems, AI-driven enemies, and a fully interactive configurable menu.</div>
+        <div class="proj-footer"><span class="proj-tag tag-oss">University project</span><span class="proj-arrow">↗</span></div>
       </div>
 
     </div>
@@ -487,7 +508,8 @@
         <p class="modal-desc" id="modal-desc"></p>
         <div class="modal-highlights" id="modal-highlights"></div>
         <div class="modal-actions">
-          <a class="btn-primary" id="modal-github" href="#" target="_blank" rel="noopener">Ver en GitHub ↗</a>
+          <a class="btn-primary" id="modal-github" href="#" target="_blank" rel="noopener">View on GitHub ↗</a>
+          <a class="btn-ghost" id="modal-doc" href="#" target="_blank" rel="noopener" style="display:none;">📄 View Document ↗</a>
         </div>
       </div>
     </div>
@@ -648,6 +670,17 @@
 </script>
 
 <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const projectCards = document.querySelectorAll(".proj-card[data-title]");
+    const countEl = document.getElementById("projects-count");
+
+    if (countEl) {
+      countEl.textContent = projectCards.length;
+    }
+  });
+</script>
+
+<script>
   // Project Modal
   const overlay = document.getElementById('proj-modal');
   const closeBtn = document.getElementById('modal-close');
@@ -657,6 +690,15 @@
     document.getElementById('modal-title').textContent    = card.dataset.title;
     document.getElementById('modal-desc').textContent     = card.dataset.desc;
     document.getElementById('modal-github').href          = card.dataset.github;
+
+    // Optional document link
+    const docBtn = document.getElementById('modal-doc');
+    if (card.dataset.doc) {
+      docBtn.href = card.dataset.doc;
+      docBtn.style.display = 'inline-flex';
+    } else {
+      docBtn.style.display = 'none';
+    }
 
     // Tech tags
     const techEl = document.getElementById('modal-tech');
@@ -704,5 +746,6 @@
     }
   });
 </script>
+
 </body>
 </html>
