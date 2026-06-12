@@ -150,6 +150,41 @@
     #about { border-top:1px solid var(--border); }
     .about-layout { display:grid; grid-template-columns:1fr 1.2fr; gap:5rem; align-items:start; }
     .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:2rem; }
+    .collab-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 1.2rem;
+    }
+    .collab-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .collab-item:hover {
+      border-color: var(--sun);
+      transform: translateX(4px);
+    }
+    .collab-icon {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--bg3);
+      border-radius: 8px;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .collab-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -.01em;
+    }
     .stat-card { background:var(--card); border:1px solid var(--border); border-radius:var(--r); padding:1.2rem; transition:border-color .2s; }
     .stat-card:hover { border-color:var(--sun); }
     .stat-num { font-family:'Space Mono',monospace; font-size:28px; font-weight:700; color:var(--sun); letter-spacing:-.04em; }
@@ -426,6 +461,17 @@
             <div class="stat-label">Interesting projects completed</div>
           </div>
           <div class="stat-card fade-up"><div class="stat-num">999+</div><div class="stat-label">Liters of coffee consumed</div></div>
+        </div>
+        <div class="label" style="margin-top:1.5rem; margin-bottom:0;">Companies & Collaborations</div>
+        <div class="collab-list">
+          <a class="collab-item fade-up" href="https://ropert.i3a.es" target="_blank" rel="noopener">
+            <div class="collab-icon">🎓</div>
+            <span class="collab-name">RoPeRT Research Group</span>
+          </a>
+          <a class="collab-item fade-up" href="https://example.com" target="_blank" rel="noopener">
+            <div class="collab-icon">🧠</div>
+            <span class="collab-name">BitBrain</span>
+          </a>
         </div>
       </div>
       <div class="fade-up">
