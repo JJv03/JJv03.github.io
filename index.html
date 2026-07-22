@@ -306,6 +306,7 @@
     .platform-card.tw::after  { background:radial-gradient(ellipse at top left,rgba(201,111,216,.11) 0%,transparent 65%); }
     .platform-card.li::after  { background:radial-gradient(ellipse at top left,rgba(255,154,92,.11) 0%,transparent 65%); }
     .platform-card.pt::after  { background:radial-gradient(ellipse at top left,rgba(255,143,163,.11) 0%,transparent 65%); }
+    .platform-card.or::after  { background:radial-gradient(ellipse at top left,rgba(166,206,57,.15) 0%,transparent 65%); }
     .platform-card:hover::after { opacity:1; }
 
     .platform-card.yt:hover { border-color:var(--dusk); }
@@ -314,6 +315,7 @@
     .platform-card.tw:hover { border-color:var(--magenta); }
     .platform-card.li:hover { border-color:var(--sun); }
     .platform-card.pt:hover { border-color:var(--blush); }
+    .platform-card.or:hover { border-color:#A6CE39; }
 
     .platform-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.2rem; position:relative; z-index:1; }
     .platform-icon { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
@@ -323,6 +325,7 @@
     .tw-ic { background:rgba(201,111,216,.12); font-size:16px; font-weight:700; color:var(--magenta); font-family:'Syne',sans-serif; }
     .li-ic { background:rgba(255,154,92,.12); }
     .pt-ic { background:rgba(255,143,163,.12); }
+    .or-ic { background:rgba(166,206,57,.15); }
 
     .platform-badge { font-family:'Space Mono',monospace; font-size:10px; padding:4px 10px; border-radius:999px; letter-spacing:.06em; }
     .badge-yt { background:rgba(255,107,107,.15); color:var(--dusk); }
@@ -331,6 +334,7 @@
     .badge-tw { background:rgba(201,111,216,.12); color:var(--magenta); }
     .badge-li { background:rgba(255,154,92,.12); color:var(--sun); }
     .badge-pt { background:rgba(255,143,163,.12); color:var(--blush); }
+    .badge-or { background:rgba(166,206,57,.15); color:#A6CE39; }
 
     .platform-name { font-size:18px; font-weight:700; color:var(--text); margin-bottom:4px; letter-spacing:-.02em; position:relative; z-index:1; }
     .platform-handle { font-family:'Space Mono',monospace; font-size:11px; color:var(--faint); margin-bottom:1rem; position:relative; z-index:1; }
@@ -342,6 +346,7 @@
     .platform-card.tw:hover .platform-link { color:var(--magenta); }
     .platform-card.li:hover .platform-link { color:var(--sun); }
     .platform-card.pt:hover .platform-link { color:var(--blush); }
+    .platform-card.or:hover .platform-link { color:#A6CE39; }
 
     /* CONTACT */
     #contact { border-top:1px solid var(--border); }
@@ -611,15 +616,26 @@
         <div class="platform-link">github.com/JJv03 →</div>
       </a>
 
+      <a class="platform-card or fade-up" href="https://orcid.org/0009-0003-9868-1376" target="_blank" rel="noopener">
+        <div class="platform-top">
+          <div class="platform-icon or-ic">🆔</div>
+          <span class="platform-badge badge-or">Academic</span>
+        </div>
+        <div class="platform-name">ORCID</div>
+        <div class="platform-handle">0009-0003-9868-1376</div>
+        <div class="platform-desc">My academic researcher profile, publications, and scientific contributions.</div>
+        <div class="platform-link">orcid.org/0009-0003-9868-1376 →</div>
+      </a>
+
       <a class="platform-card li fade-up" href="https://www.linkedin.com/in/juan-valle-morenilla-0ab5b7231" target="_blank" rel="noopener">
         <div class="platform-top">
           <div class="platform-icon li-ic">💼</div>
           <span class="platform-badge badge-li">Professional</span>
         </div>
         <div class="platform-name">LinkedIn</div>
-        <div class="platform-handle">in/juanvallemorenilla</div>
+        <div class="platform-handle">Juan Valle Morenilla</div>
         <div class="platform-desc">Following my professional journey, key career achievements, and connecting with the wider developer community.</div>
-        <div class="platform-link">linkedin.com/in/juanvallemorenilla →</div>
+        <div class="platform-link">linkedin/juan-valle-morenilla →</div>
       </a>
 
     </div>
@@ -634,6 +650,7 @@
         <a class="contact-email-link" href="mailto:juanvalle2003@gmail.com">juanvalle2003@gmail.com →</a>
         <div class="socials-grid">
           <a class="social-pill" href="https://github.com/JJv03" target="_blank">GitHub</a>
+          <a class="social-pill" href="https://orcid.org/0009-0003-9868-1376" target="_blank">ORCID</a>
           <a class="social-pill" href="https://www.linkedin.com/in/juan-valle-morenilla-0ab5b7231" target="_blank">LinkedIn</a>
         </div>
       </div>
@@ -662,6 +679,7 @@
   <div class="footer-right">
     <a href="https://github.com/JJv03" target="_blank">GitHub</a>
     <a href="https://www.linkedin.com/in/juan-valle-morenilla-0ab5b7231" target="_blank">LinkedIn</a>
+    <a href="https://orcid.org/0009-0003-9868-1376" target="_blank">ORCID</a>
   </div>
 </footer>
 
